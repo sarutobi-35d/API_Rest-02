@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,14 @@ public class PersonController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+//        Person person1 = personRepository.findById(id)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personne non trouvé."));
+//
+//        person1.setName(person.getName());
+//        person1.setCity(person.getCity());
+//
+//        return new ResponseEntity<>(personRepository.save(person1), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
