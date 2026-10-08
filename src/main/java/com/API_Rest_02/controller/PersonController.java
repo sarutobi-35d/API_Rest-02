@@ -1,6 +1,7 @@
 package com.API_Rest_02.controller;
 
 import com.API_Rest_02.entity.Person;
+import com.API_Rest_02.exception.PersonNotFoundException;
 import com.API_Rest_02.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class PersonController {
             return new ResponseEntity<>(personOptional.get(), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new PersonNotFoundException("Person not found");
     }
 
     @PostMapping
@@ -40,7 +41,10 @@ public class PersonController {
 
         Person personSaved = personRepository.save(person);
 
-        return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
+        if (person.getName().length() > 2 ){
+            return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
+        } else throw new IllegalArgumentException("Nom trop petit");
+
     }
 
     @PutMapping("/{id}")
@@ -59,7 +63,7 @@ public class PersonController {
             return new ResponseEntity<>(personRepository.save(person1), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new PersonNotFoundException("Person not found");
 
 //        Person person1 = personRepository.findById(id)
 //                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personne non trouvé."));
@@ -81,7 +85,7 @@ public class PersonController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new PersonNotFoundException("Person not found");
     }
 
 

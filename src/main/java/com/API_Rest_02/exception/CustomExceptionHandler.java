@@ -1,0 +1,37 @@
+package com.API_Rest_02.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+
+@RestControllerAdvice
+public class CustomExceptionHandler {
+
+    @ExceptionHandler(PersonNotFoundException.class)
+    public ResponseEntity<ApiError> handlePersonNotFoundException(PersonNotFoundException e){
+
+        ApiError apiError = new ApiError();
+
+        apiError.setMessage(e.getMessage());
+        apiError.setCode(HttpStatus.NOT_FOUND.value());
+        apiError.setTimestamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleException(Exception e){
+
+        ApiError apiError = new ApiError();
+
+        apiError.setMessage(e.getMessage());
+        apiError.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        apiError.setTimestamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+}
